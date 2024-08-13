@@ -23,19 +23,28 @@ export const FinancialRecordsProvider=({children}: {children: React.ReactNode})=
 
     const [records,setRecords]=useState<FinancialRecords[]>([]);
 
-    const addRecord=async(record: FinancialRecords)=>{
-        const response=await fetch("http//localhost:3001/financial-records",{method: "POST",body: JSON.stringify(record)});
-
+    const addRecord = async (record: FinancialRecords) => {
         try {
+            const response = await fetch("http://localhost:3001/financial-records", {
+                method: "POST",
+                body: JSON.stringify(record),
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+    
             if (response.ok) {
-                const newRecord=await response.json();
-                setRecords((prev)=>[...prev,newRecord]);
+                const newRecord = await response.json();
+                setRecords((prev) => [...prev, newRecord]);
+            } else {
+                console.error(`Failed to add record: ${response.statusText}`);
             }
         } catch (error) {
-            
+            console.error("An error occurred:", error);
         }
-        
-    }
+    };
+    
+
     return <FinancialRecordsContext.Provider value={{records,addRecord}}>
         {""}
         {children}
