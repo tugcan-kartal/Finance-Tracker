@@ -38,11 +38,11 @@ const EditableCell: React.FC<EditableCellProps> = ({ value: initialValue, row, c
 };
 
 export const FinancialRecordList = () => {
-    const { records,updateRecord } = useFinancialRecords();
+    const { records, updateRecord, deleteRecord } = useFinancialRecords();
 
-    const updateCellRecord=(rowIndex:number,columnId:string,value: any)=>{
-        const id=records[rowIndex]._id;
-        updateRecord(id ?? "",{...records[rowIndex], [columnId]:value})
+    const updateCellRecord = (rowIndex: number, columnId: string, value: any) => {
+        const id = records[rowIndex]._id;
+        updateRecord(id ?? "", { ...records[rowIndex], [columnId]: value });
     }
 
     const columns: Array<Column<FinancialRecords>> = useMemo(() => [
@@ -84,14 +84,14 @@ export const FinancialRecordList = () => {
         {
             Header: "Delete",
             id: "delete",
-            Cell: (row) => (
-                <button onClick={() => null} className="button">Delete</button>
+            Cell: (props) => (
+                <button onClick={() => deleteRecord(props.row.original._id ?? "")} className="button">Delete</button>
             )
         },
     ], [records]);
-    
+
     const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({ columns, data: records });
-    
+
     return (
         <div className="table-container">
             <table {...getTableProps()} className="table">
